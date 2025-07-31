@@ -46,6 +46,7 @@ project-root/
 - **Chrome** (default)
 - **Firefox**
 - **Microsoft Edge**
+- **Parallel cross-browser execution** via TestNG suites
 
 ### Test Categories
 - **Positive Tests** - Happy path scenarios
@@ -68,7 +69,6 @@ Before running the tests, ensure you have:
 2. **Maven** installed
 3. **Browser drivers** (handled automatically by Selenium Manager for Chrome/Firefox)
 4. **Maven** installed (for dependency management)
-5. **TestNG XML suites** (included in the project)
 
 ## 🏃‍♂️ Running Tests
 
@@ -196,14 +196,18 @@ For negative login tests, you can pass parameters via TestNG XML configuration:
 ### Test Suite Configuration
 The project includes pre-configured TestNG XML suites located in `src/test/resources/TestSuites/`:
 
-- **SmokeTestSuite.xml**: Critical functionality tests for quick validation
-- **FullRegressionSuite.xml**: Complete test suite for comprehensive testing
-- **DebugSuite.xml**: Minimal test suite for debugging purposes
+- **SmokeTestSuite.xml**: Runs all tests marked with `@Test(groups = {"smoke"})` - includes positive login functionality
+- **FullRegressionSuite.xml**: Comprehensive cross-browser testing suite that includes:
+    - Positive login tests on Chrome and Firefox
+    - Negative login tests with invalid username (Firefox) and password (Edge)
+    - Complete exception handling tests (Chrome)
+- **DebugSuite.xml**: Single test for debugging - runs only `noSuchElementExceptionTest`
 
 ### Browser Configuration
 The framework automatically handles browser driver management:
-- Chrome and Firefox use Selenium Manager
-- Edge requires manual driver placement in `src/main/resources/`
+- Chrome and Firefox use Selenium Manager (automatic driver download)
+- Edge uses Selenium Manager (automatic driver download)
+- Cross-browser testing is configured in `FullRegressionSuite.xml`
 
 ### Wait Configuration
 - Default explicit wait timeout: **10 seconds**
